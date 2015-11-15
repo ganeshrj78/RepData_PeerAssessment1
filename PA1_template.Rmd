@@ -8,17 +8,73 @@ output:
 
 ## Loading and preprocessing the data
 
+Load the releavent datasets 
 
+```{r}setwd("C://R//RepData_PeerAssessment1")
+activity <- read.csv("activity.csv")
+names(activity)
+```
 
 ## What is mean total number of steps taken per day?
 
+```{r}
+activity <- read.csv("activity.csv")
+stepsperday <- aggregate(steps ~ date, activity, sum, na.rm=TRUE)
+barplot(stepsperday$steps, names.arg=stepsperday$date,xlab="Total steps per day", ylab="Interval")
+```
 
+The mean and median steps are derived as below:
+
+```{r}
+median(stepsperday$steps)
+mean(stepsperday$steps)
+```
 
 ## What is the average daily activity pattern?
 
+Average is basically the mean by interval. So using the above logic and use plot function with type as "l""
+
+```{r}
+activity <- read.csv("activity.csv")
+stepsinterval <- aggregate(steps ~ interval, activity, mean, na.rm=TRUE)
+plot(stepsinterval, type="l")
+```
+
+To get the max of 5-min interval 
+```{r}
+stepsinterval$interval[which.max(stepsinterval$steps)]
+```
 
 
 ## Imputing missing values
+Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+
+```{r}
+activity <- read.csv("activity.csv")
+missing <- sum(is.na(activity))
+missing
+```
+
+Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+
+Create a new dataset that is equal to the original dataset but with the missing data filled in and plot in barplot 
+
+
+```{r}
+activity <- read.csv("activity.csv")
+stepsinterval <- aggregate(steps ~ interval, activity, mean)
+activity <- merge(activity, stepsinterval, by="interval", suffixes = c("",".y"))
+getNAs <- is.na(activity$steps)
+activity$steps[getNAs] <- activity$steps.y[getNAs]
+activity <- activity[,c(1:3)]
+activity
+
+stepsperday <- aggregate(steps ~ date, activity, sum)
+barplot(stepsperday$steps, names.arg=stepsperday$date,xlab="Total steps per day", ylab="Interval")
+
+mean(stepsperday$steps)
+median(stepsperday$steps)
+```
 
 
 
