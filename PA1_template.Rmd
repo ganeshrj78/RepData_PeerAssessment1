@@ -10,7 +10,8 @@ output:
 
 Load the releavent datasets 
 
-```{r}setwd("C://R//RepData_PeerAssessment1")
+```{r}
+setwd("C://R//RepData_PeerAssessment1")
 activity <- read.csv("activity.csv")
 names(activity)
 ```
@@ -79,3 +80,14 @@ median(stepsperday$steps)
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+Create a new factor variable in the dataset with two levels -- "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
+
+Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). The plot should look something like the following, which was created using simulated data
+
+```{r}
+activity <- read.csv("activity.csv")
+ifelse(as.POSIXlt(activity$date)$wday %in% c(0,6), 'weekend','weekday')
+```
+
+
